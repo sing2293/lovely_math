@@ -1,0 +1,5 @@
+.DS_Store
+node_modules/
+# plaintext solutions never belong in the repo; only the encrypted vault-data.js does
+vault-source/
+*.plain.json

@@ -1,0 +1,466 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lovely Math · MAT 1330 Study Garden</title>
+  <meta name="description" content="A playful, interactive study garden for MAT 1330 (Calculus for the Life Sciences I) at uOttawa: recurring exam question patterns, click-through solution walkthroughs, hands-on labs and a password-locked test room.">
+  <meta name="theme-color" content="#fdf2f4">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z' fill='%23d76a8b'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Josefin+Sans:wght@400;600&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="locked">
+
+<!-- ============ SVG sprite: blossoms, lavender, hearts, sparkles, locks ============ -->
+<svg class="svg-sprite" aria-hidden="true" focusable="false">
+  <defs>
+    <radialGradient id="petalGrad" cx="50%" cy="100%" r="105%">
+      <stop offset="0" stop-color="#ea7fa2"/>
+      <stop offset="0.42" stop-color="#f5b2c6"/>
+      <stop offset="1" stop-color="#fff1f5"/>
+    </radialGradient>
+    <linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#bca8e6"/>
+      <stop offset="1" stop-color="#d76a8b"/>
+    </linearGradient>
+    <linearGradient id="pencilGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f7c2d2"/>
+      <stop offset="0.5" stop-color="#ef9fb8"/>
+      <stop offset="1" stop-color="#e486a3"/>
+    </linearGradient>
+    <filter id="sketch" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="4"/>
+      <feDisplacementMap in="SourceGraphic" scale="2.4"/>
+    </filter>
+  </defs>
+
+  <symbol id="petalShape" viewBox="-50 -50 100 100">
+    <path d="M0,-4 C-12,-10 -19,-28 -10,-40 C-6,-45 -2,-43 0,-38 C2,-43 6,-45 10,-40 C19,-28 12,-10 0,-4Z"/>
+  </symbol>
+
+  <symbol id="blossom" viewBox="-50 -50 100 100" overflow="visible">
+    <g fill="url(#petalGrad)" stroke="#f0a2b9" stroke-width="0.7">
+      <path id="pt" d="M0,-4 C-12,-10 -19,-28 -10,-40 C-6,-45 -2,-43 0,-38 C2,-43 6,-45 10,-40 C19,-28 12,-10 0,-4Z"/>
+      <use href="#pt" transform="rotate(72)"/>
+      <use href="#pt" transform="rotate(144)"/>
+      <use href="#pt" transform="rotate(216)"/>
+      <use href="#pt" transform="rotate(288)"/>
+    </g>
+    <circle r="7.5" fill="#f9c6d5"/>
+    <g id="stm" stroke="#cf4f78" stroke-width="1.3" stroke-linecap="round">
+      <line x1="0" y1="-5" x2="0" y2="-15"/>
+      <circle cx="0" cy="-16.5" r="1.9" fill="#b8325e" stroke="none"/>
+    </g>
+    <use href="#stm" transform="rotate(45)"/>
+    <use href="#stm" transform="rotate(90)"/>
+    <use href="#stm" transform="rotate(135)"/>
+    <use href="#stm" transform="rotate(180)"/>
+    <use href="#stm" transform="rotate(225)"/>
+    <use href="#stm" transform="rotate(270)"/>
+    <use href="#stm" transform="rotate(315)"/>
+  </symbol>
+
+  <symbol id="bud" viewBox="-14 -22 28 36" overflow="visible">
+    <path d="M0,-20 C9,-14 10,-2 0,6 C-10,-2 -9,-14 0,-20Z" fill="#f29bb6" stroke="#e57f9f" stroke-width="0.8"/>
+    <path d="M-6,4 C-3,10 3,10 6,4 C3,6 -3,6 -6,4Z" fill="#8a6a5a"/>
+  </symbol>
+
+  <symbol id="leaf" viewBox="-22 -9 44 18" overflow="visible">
+    <path d="M-21,0 C-10,-10 10,-10 21,0 C10,10 -10,10 -21,0Z" fill="#bccfb2"/>
+    <path d="M-19,0 L19,0" stroke="#9cb491" stroke-width="1.1"/>
+  </symbol>
+
+  <symbol id="lavSprig" viewBox="0 0 60 210" overflow="visible">
+    <path d="M30,210 C31,160 29,110 31,30" stroke="#97ad8e" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+    <g fill="#b39ce2">
+      <ellipse cx="24" cy="40" rx="5" ry="8" transform="rotate(-28 24 40)"/>
+      <ellipse cx="37" cy="48" rx="5" ry="8" transform="rotate(26 37 48)"/>
+      <ellipse cx="24" cy="60" rx="5.4" ry="8.5" transform="rotate(-28 24 60)"/>
+      <ellipse cx="38" cy="68" rx="5.4" ry="8.5" transform="rotate(26 38 68)"/>
+      <ellipse cx="24" cy="82" rx="5.6" ry="9" transform="rotate(-28 24 82)"/>
+      <ellipse cx="38" cy="90" rx="5.6" ry="9" transform="rotate(26 38 90)"/>
+      <ellipse cx="25" cy="104" rx="5.6" ry="9" transform="rotate(-28 25 104)"/>
+      <ellipse cx="37" cy="112" rx="5.4" ry="8.5" transform="rotate(26 37 112)"/>
+    </g>
+    <g fill="#8f73cf">
+      <ellipse cx="31" cy="28" rx="4.4" ry="7"/>
+      <ellipse cx="30" cy="52" rx="4.2" ry="7"/>
+      <ellipse cx="31" cy="74" rx="4.4" ry="7.4"/>
+      <ellipse cx="31" cy="96" rx="4.4" ry="7.4"/>
+    </g>
+    <g fill="#d7c9f3">
+      <circle cx="27" cy="36" r="2"/>
+      <circle cx="35" cy="62" r="2"/>
+      <circle cx="27" cy="88" r="2"/>
+    </g>
+  </symbol>
+
+  <symbol id="heart" viewBox="0 0 24 24">
+    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+  </symbol>
+
+  <symbol id="sparkle" viewBox="-10 -10 20 20">
+    <path d="M0,-10 C1,-3 3,-1 10,0 C3,1 1,3 0,10 C-1,3 -3,1 -10,0 C-3,-1 -1,-3 0,-10Z"/>
+  </symbol>
+
+  <symbol id="star" viewBox="0 0 24 24">
+    <path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6-4.9-4.6 6.6-.8z"/>
+  </symbol>
+
+  <symbol id="bow" viewBox="0 0 80 46">
+    <path d="M40,20 C30,4 8,0 6,12 C4,24 26,26 40,20Z" fill="#f4b1c5" stroke="#d76a8b" stroke-width="1.8"/>
+    <path d="M40,20 C50,4 72,0 74,12 C76,24 54,26 40,20Z" fill="#f4b1c5" stroke="#d76a8b" stroke-width="1.8"/>
+    <path d="M36,22 C30,30 24,38 20,44 L28,42 L30,46 C34,38 38,30 40,24Z" fill="#ef9fb8" stroke="#d76a8b" stroke-width="1.5"/>
+    <path d="M44,22 C50,30 56,38 60,44 L52,42 L50,46 C46,38 42,30 40,24Z" fill="#ef9fb8" stroke="#d76a8b" stroke-width="1.5"/>
+    <ellipse cx="40" cy="20" rx="6" ry="6.5" fill="#e98fab" stroke="#d76a8b" stroke-width="1.8"/>
+  </symbol>
+
+  <symbol id="lockClosed" viewBox="0 0 64 64">
+    <path d="M20,28 V20 a12,12 0 0 1 24,0 V28" fill="none" stroke="#8b6fc6" stroke-width="5" stroke-linecap="round"/>
+    <path d="M32 58l-2.9-2.6C18.8 46.1 12 39.9 12 32.4 12 26.3 16.8 21.5 22.9 21.5c3.5 0 6.8 1.6 9.1 4.2 2.3-2.6 5.6-4.2 9.1-4.2 6.1 0 10.9 4.8 10.9 10.9 0 7.5-6.8 13.7-17.1 23L32 58z" fill="#ec9ab3" stroke="#d76a8b" stroke-width="2"/>
+    <circle cx="32" cy="36" r="3.4" fill="#fff"/>
+    <path d="M32,38 v6" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+  </symbol>
+
+  <symbol id="lockOpen" viewBox="0 0 64 64">
+    <path d="M20,26 V18 a12,12 0 0 1 23.5,-3.4" fill="none" stroke="#3a8a69" stroke-width="5" stroke-linecap="round"/>
+    <path d="M32 58l-2.9-2.6C18.8 46.1 12 39.9 12 32.4 12 26.3 16.8 21.5 22.9 21.5c3.5 0 6.8 1.6 9.1 4.2 2.3-2.6 5.6-4.2 9.1-4.2 6.1 0 10.9 4.8 10.9 10.9 0 7.5-6.8 13.7-17.1 23L32 58z" fill="#bfe6d4" stroke="#3a8a69" stroke-width="2"/>
+    <path d="M25,37 l5,5 l9,-10" fill="none" stroke="#3a8a69" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+
+  <symbol id="petalIcon" viewBox="0 0 24 24">
+    <path d="M12 3c3 3 5 6 5 9a5 5 0 0 1-10 0c0-3 2-6 5-9z"/>
+  </symbol>
+
+  <symbol id="close" viewBox="0 0 24 24">
+    <path d="M6.4 5l5.6 5.6L17.6 5 19 6.4 13.4 12l5.6 5.6-1.4 1.4-5.6-5.6L6.4 19 5 17.6 10.6 12 5 6.4z"/>
+  </symbol>
+</svg>
+
+<div class="petal-layer" id="petal-layer" aria-hidden="true"></div>
+
+<!-- ============ the garden gate: one sign-in for the whole site ============ -->
+<div class="gate" id="gate" role="dialog" aria-modal="true" aria-labelledby="gate-title">
+  <svg class="gate-deco gate-sakura" viewBox="0 0 440 320" aria-hidden="true">
+    <g fill="none" stroke="#7d5449" stroke-linecap="round">
+      <path d="M-10,34 C60,42 122,70 192,88 S322,110 440,72" stroke-width="7"/>
+      <path d="M150,80 C176,120 192,152 232,184" stroke-width="4"/>
+      <path d="M262,98 C292,72 322,42 352,22" stroke-width="3.6"/>
+    </g>
+    <use href="#leaf" x="118" y="92" width="44" height="18" transform="rotate(28 140 101)"/>
+    <use href="#bud" x="268" y="44" width="20" height="28" transform="rotate(24 278 58)"/>
+    <use href="#blossom" x="22" y="2" width="62" height="62"/>
+    <use href="#blossom" x="98" y="34" width="76" height="76"/>
+    <use href="#blossom" x="226" y="146" width="60" height="60"/>
+    <use href="#blossom" x="294" y="64" width="68" height="68"/>
+    <use href="#blossom" x="336" y="-6" width="52" height="52"/>
+  </svg>
+  <svg class="gate-deco gate-lavender" viewBox="0 0 340 300" aria-hidden="true">
+    <use href="#lavSprig" x="150" y="40" width="60" height="210" transform="rotate(-24 180 250)"/>
+    <use href="#lavSprig" x="190" y="20" width="60" height="210" transform="rotate(-6 220 240)"/>
+    <use href="#lavSprig" x="230" y="44" width="60" height="210" transform="rotate(14 260 254)"/>
+    <use href="#blossom" x="196" y="196" width="66" height="66"/>
+    <use href="#blossom" x="150" y="186" width="48" height="48"/>
+  </svg>
+  <form class="gate-card" id="gate-form" autocomplete="on" novalidate>
+    <div class="lang-switch gate-lang" role="group" aria-label="Language" data-i18n-attr="aria-label:lang.label"><button type="button" data-lang="en">EN</button><button type="button" data-lang="tr">TR</button></div>
+    <svg class="bow" viewBox="0 0 80 46" aria-hidden="true"><use href="#bow"/></svg>
+    <div class="kicker" data-i18n="gate.kicker">MAT 1330 study garden</div>
+    <h1 class="gate-title" id="gate-title">Lovely Math</h1>
+    <p class="gate-sub" data-i18n="gate.sub">This little garden is private. Sign in to come in ♡</p>
+    <label class="gate-field"><span data-i18n="gate.name">Name</span><input id="gate-name" name="username" autocomplete="username" autocapitalize="words" spellcheck="false"></label>
+    <label class="gate-field"><span data-i18n="gate.password">Password</span><input id="gate-pw" name="password" type="password" autocomplete="current-password"></label>
+    <button class="btn btn-rose" type="submit" id="gate-go" data-i18n="gate.enter">Enter the garden ♡</button>
+    <p class="gate-note" data-i18n="gate.note">You stay signed in on this device, and your progress saves automatically.</p>
+    <div class="gate-msg" id="gate-msg" aria-live="polite"></div>
+  </form>
+</div>
+
+<header class="topbar">
+  <a class="brand" href="#home" aria-label="Lovely Math, back to top">Lovely Math<svg aria-hidden="true"><use href="#heart"/></svg></a>
+  <nav class="tabs" aria-label="Sections">
+    <a href="#patterns" data-i18n="nav.patterns">Patterns</a>
+    <a href="#labs" data-i18n="nav.labs">Labs</a>
+    <a href="#finder" data-i18n="nav.finder">Method finder</a>
+    <a href="#toolbox" data-i18n="nav.toolbox">Toolbox</a>
+    <a href="#test" data-i18n="nav.test">Test room</a>
+    <a href="#plan" data-i18n="nav.plan">7-day plan</a>
+  </nav>
+  <div class="who" id="who" hidden>
+    <span class="who-name"></span>
+    <button type="button" id="logout" data-i18n="logout">Log out</button>
+  </div>
+  <div class="lang-switch" role="group" aria-label="Language" data-i18n-attr="aria-label:lang.label"><button type="button" data-lang="en">EN</button><button type="button" data-lang="tr">TR</button></div>
+  <button class="icon-btn" id="petal-toggle" type="button" aria-pressed="true" title="Falling petals on/off" data-i18n-attr="title:petals.title">
+    <svg aria-hidden="true"><use href="#petalIcon"/></svg><span class="sr-only">Toggle falling petals</span>
+  </button>
+</header>
+
+<main>
+
+  <!-- ============================== HERO ============================== -->
+  <section id="home" class="hero">
+    <div class="torn deco-torn-a" aria-hidden="true"></div>
+    <div class="torn deco-torn-b grid-paper" aria-hidden="true"></div>
+    <div class="deco deco-polka polka" aria-hidden="true"></div>
+
+    <!-- sakura branch, top left -->
+    <svg class="deco deco-sakura-left" viewBox="0 0 440 320" aria-hidden="true">
+      <g fill="none" stroke="#7d5449" stroke-linecap="round">
+        <path d="M-10,34 C60,42 122,70 192,88 S322,110 440,72" stroke-width="7"/>
+        <path d="M150,80 C176,120 192,152 232,184" stroke-width="4"/>
+        <path d="M262,98 C292,72 322,42 352,22" stroke-width="3.6"/>
+        <path d="M72,48 C82,82 72,120 92,162" stroke-width="3.2"/>
+        <path d="M332,92 C352,120 380,138 410,146" stroke-width="2.8"/>
+      </g>
+      <use href="#leaf" x="118" y="92" width="44" height="18" transform="rotate(28 140 101)"/>
+      <use href="#leaf" x="250" y="112" width="40" height="16" transform="rotate(-20 270 120)"/>
+      <use href="#leaf" x="60" y="130" width="38" height="16" transform="rotate(64 79 138)"/>
+      <use href="#leaf" x="356" y="126" width="40" height="16" transform="rotate(18 376 134)"/>
+      <use href="#bud" x="132" y="14" width="22" height="30" transform="rotate(-18 143 29)"/>
+      <use href="#bud" x="268" y="44" width="20" height="28" transform="rotate(24 278 58)"/>
+      <use href="#bud" x="398" y="44" width="20" height="28" transform="rotate(30 408 58)"/>
+      <use href="#bud" x="212" y="182" width="20" height="28" transform="rotate(150 222 196)"/>
+      <use href="#blossom" x="22" y="2" width="62" height="62"/>
+      <use href="#blossom" x="98" y="34" width="76" height="76"/>
+      <use href="#blossom" x="176" y="56" width="64" height="64"/>
+      <use href="#blossom" x="226" y="146" width="60" height="60"/>
+      <use href="#blossom" x="294" y="64" width="68" height="68"/>
+      <use href="#blossom" x="336" y="-6" width="52" height="52"/>
+      <use href="#blossom" x="66" y="120" width="52" height="52"/>
+      <use href="#blossom" x="384" y="118" width="46" height="46"/>
+      <use href="#blossom" x="196" y="114" width="40" height="40"/>
+    </svg>
+
+    <!-- smaller sakura, top right -->
+    <svg class="deco deco-sakura-right" viewBox="0 0 440 320" aria-hidden="true">
+      <g fill="none" stroke="#7d5449" stroke-linecap="round">
+        <path d="M-10,40 C70,50 140,80 230,96 S340,110 420,90" stroke-width="6"/>
+        <path d="M180,90 C200,130 216,160 248,190" stroke-width="3.4"/>
+      </g>
+      <use href="#leaf" x="150" y="96" width="40" height="16" transform="rotate(30 170 104)"/>
+      <use href="#bud" x="300" y="70" width="20" height="28" transform="rotate(20 310 84)"/>
+      <use href="#blossom" x="40" y="12" width="58" height="58"/>
+      <use href="#blossom" x="140" y="44" width="66" height="66"/>
+      <use href="#blossom" x="236" y="160" width="54" height="54"/>
+      <use href="#blossom" x="330" y="60" width="50" height="50"/>
+    </svg>
+
+    <!-- hand-drawn parabola on grid paper, top right -->
+    <svg class="deco deco-graph" viewBox="0 0 280 210" aria-hidden="true">
+      <g filter="url(#sketch)">
+        <line x1="20" y1="150" x2="268" y2="150" stroke="#2e2337" stroke-width="1.8"/>
+        <path d="M262,145 L270,150 L262,155" fill="none" stroke="#2e2337" stroke-width="1.8"/>
+        <line x1="140" y1="200" x2="140" y2="12" stroke="#2e2337" stroke-width="1.8"/>
+        <path d="M135,18 L140,9 L145,18" fill="none" stroke="#2e2337" stroke-width="1.8"/>
+        <path d="M58,150 C88,150 104,40 140,40 C176,40 192,150 222,150" fill="none" stroke="#e07a9b" stroke-width="2.6" stroke-linecap="round"/>
+        <path d="M86,186 C110,120 122,58 158,58 C190,58 206,118 232,176" fill="none" stroke="#ec9ab3" stroke-width="2" stroke-dasharray="5 6" stroke-linecap="round"/>
+        <line x1="179" y1="146" x2="179" y2="154" stroke="#2e2337" stroke-width="1.5"/>
+        <line x1="218" y1="146" x2="218" y2="154" stroke="#2e2337" stroke-width="1.5"/>
+        <line x1="101" y1="146" x2="101" y2="154" stroke="#2e2337" stroke-width="1.5"/>
+        <line x1="62" y1="146" x2="62" y2="154" stroke="#2e2337" stroke-width="1.5"/>
+      </g>
+      <g font-family="Caveat, cursive" font-size="17" fill="#2e2337">
+        <text x="56" y="170">-2</text><text x="96" y="170">-1</text><text x="128" y="170">0</text>
+        <text x="175" y="170">1</text><text x="214" y="170">2</text>
+        <text x="270" y="140">x</text><text x="148" y="16">y</text>
+        <text x="170" y="30" font-size="19" fill="#b13a64">y = ax² + bx + c</text>
+      </g>
+    </svg>
+
+    <!-- lavender & blossoms, bottom right -->
+    <svg class="deco deco-lavender" viewBox="0 0 340 300" aria-hidden="true">
+      <use href="#lavSprig" x="150" y="40" width="60" height="210" transform="rotate(-24 180 250)"/>
+      <use href="#lavSprig" x="190" y="20" width="60" height="210" transform="rotate(-6 220 240)"/>
+      <use href="#lavSprig" x="230" y="44" width="60" height="210" transform="rotate(14 260 254)"/>
+      <use href="#lavSprig" x="262" y="80" width="56" height="196" transform="rotate(32 290 276)"/>
+      <use href="#leaf" x="150" y="230" width="46" height="18" transform="rotate(-30 173 239)"/>
+      <use href="#leaf" x="268" y="236" width="44" height="18" transform="rotate(26 290 245)"/>
+      <use href="#blossom" x="196" y="196" width="66" height="66"/>
+      <use href="#blossom" x="254" y="170" width="54" height="54"/>
+      <use href="#blossom" x="150" y="186" width="48" height="48"/>
+    </svg>
+
+    <!-- floating doodles (click for a tiny fact) -->
+    <button class="doodle" style="top:15%;left:11%;--r:-6deg" data-i18n-attr="data-tip:tip.pyth" data-tip="<strong>Pythagoras.</strong> The distance formula in disguise: the distance from (0,0) to (x, y) is √(x² + y²).">a² + b² = c²<span class="ul"></span></button>
+    <button class="doodle hide-sm" style="top:28%;left:24%;--r:4deg;font-size:36px" data-i18n-attr="data-tip:tip.power" data-tip="<strong>Power rule.</strong> d/dx xⁿ = n·xⁿ⁻¹, so d/dx x² = 2x. The slope of a parabola grows linearly.">x²</button>
+    <button class="doodle" style="top:45%;left:5%;--r:-3deg" data-i18n-attr="data-tip:tip.line" data-tip="<strong>Lines.</strong> m is the slope (rise over run), b the intercept. Every tangent line is one of these: y = f(a) + f′(a)(x − a).">y = mx + b<span class="ul"></span></button>
+    <button class="doodle hide-sm" style="top:62%;left:12%;--r:5deg" data-i18n-attr="data-tip:tip.deriv" data-tip="<strong>The derivative.</strong> The slope of the secant line as the gap h shrinks to 0. Try it in the Tangent Lab.">f′(x) = lim<sub>h→0</sub> Δf / h</button>
+    <button class="doodle" style="top:41%;right:6%;--r:3deg" data-i18n-attr="data-tip:tip.pi" data-tip="<strong>π.</strong> Period of sin(bt) is 2π/b. That is how a model with a 24-hour rhythm picks its b = 2π/24.">π = 3.14159…<span class="ul"></span></button>
+    <button class="doodle hide-sm" style="top:58%;right:9%;--r:-4deg" data-i18n-attr="data-tip:tip.gauss" data-tip="<strong>Young Gauss</strong> reportedly summed 1 to 100 in seconds by pairing numbers: 1+100, 2+99, … 50 pairs of 101 = 5050.">Σ k = n(n+1)/2</button>
+    <button class="doodle hide-sm" style="top:73%;right:24%;--r:6deg" data-i18n-attr="data-tip:tip.e" data-tip="<strong>e ≈ 2.71828.</strong> The one base where the slope of eˣ equals its height: d/dx eˣ = eˣ.">eˣ</button>
+    <button class="doodle hide-sm" style="top:80%;left:30%;--r:-5deg" data-i18n-attr="data-tip:tip.sqrt" data-tip="<strong>√x</strong> is x to the power ½, so its derivative is ½x^(−½) = 1/(2√x). That slope blows up at x = 0, so the derivative does not exist there.">√x</button>
+    <button class="doodle hide-sm" style="bottom:7%;left:6%;--r:-3deg;font-size:22px;line-height:1.25;text-align:left" data-i18n-attr="data-tip:tip.area" data-tip="<strong>Area and volume.</strong> dA/dr = 2πr is the circumference, and dV/dr = 4πr² is the surface area. Derivatives everywhere!">A = πr²<br>V = ⁴⁄₃ πr³</button>
+
+    <svg class="sparkle" style="top:22%;left:44%" aria-hidden="true"><use href="#sparkle"/></svg>
+    <svg class="sparkle rose" style="top:12%;right:30%;animation-delay:.6s" aria-hidden="true"><use href="#sparkle"/></svg>
+    <svg class="sparkle hide-sm" style="top:66%;left:40%;animation-delay:1.2s" aria-hidden="true"><use href="#sparkle"/></svg>
+    <svg class="sparkle rose hide-sm" style="top:52%;right:30%;animation-delay:1.8s" aria-hidden="true"><use href="#sparkle"/></svg>
+    <svg class="sparkle hide-sm" style="bottom:22%;right:42%;animation-delay:.9s" aria-hidden="true"><use href="#sparkle"/></svg>
+    <svg class="float-heart" style="top:19%;left:33%" aria-hidden="true"><use href="#heart"/></svg>
+    <svg class="float-heart" style="top:34%;right:21%;animation-delay:1s" aria-hidden="true"><use href="#heart"/></svg>
+    <svg class="float-heart hide-sm" style="bottom:28%;left:22%;animation-delay:2s" aria-hidden="true"><use href="#heart"/></svg>
+
+    <div class="hero-inner">
+      <div class="kicker" data-i18n="hero.kicker">MAT 1330 · Calculus for the Life Sciences I · uOttawa</div>
+      <h1 class="hero-title">Lovely Math<svg class="tiny-heart" viewBox="0 0 24 24" aria-hidden="true"><use href="#heart"/></svg></h1>
+      <div><span class="ribbon" data-i18n="hero.ribbon">THINK · SOLVE · ACHIEVE</span></div>
+      <div class="divider" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#heart"/></svg></div>
+      <p class="hero-sub" data-i18n="hero.sub">A study garden built from real past-exam patterns. Learn the handful of question types that keep coming back, practice them until they feel easy, then test yourself.</p>
+      <div class="hero-actions">
+        <a class="btn btn-rose" href="#patterns" data-i18n="hero.cta1">See the exam patterns ✿</a>
+        <a class="btn btn-ghost" href="#test" data-i18n="hero.cta2">Enter the test room ♡</a>
+      </div>
+
+      <figure class="quote-card">
+        <p data-i18n-html="hero.quote">The only way to learn mathematics is to <em>do</em> mathematics.</p>
+        <cite>Paul Halmos</cite>
+      </figure>
+
+      <p class="hello" id="hello" aria-live="polite"></p>
+    </div>
+  </section>
+
+  <!-- ============================== PATTERNS ============================== -->
+  <section id="patterns" class="band">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker" data-i18n="pat.kicker">What keeps coming back</div>
+        <h2 class="section-title" data-i18n-html="pat.title">The <span class="swash">exam patterns</span></h2>
+        <p class="lead" id="patterns-lead" data-i18n="pat.lead">Each card is a question family found across past MAT 1330 papers. Tap one to walk through how to solve it, one step at a time.</p>
+      </div>
+      <div class="evidence-strip" id="evidence-strip"></div>
+      <div class="pattern-filters" id="pattern-filters" role="group" aria-label="Filter question families" data-i18n-attr="aria-label:filter.aria"></div>
+      <div class="pattern-grid" id="pattern-grid"></div>
+    </div>
+  </section>
+
+  <!-- ============================== LABS ============================== -->
+  <section id="labs">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker" data-i18n="labs.kicker">Play with the ideas</div>
+        <h2 class="section-title" data-i18n-html="labs.title">Little <span class="swash">math labs</span></h2>
+        <p class="lead" data-i18n="labs.lead">Drag the sliders and watch the mathematics move. Each lab matches one of the exam patterns.</p>
+      </div>
+      <div class="lab-tabs" id="lab-tabs" role="tablist" aria-label="Labs"></div>
+      <div id="lab-area"></div>
+    </div>
+  </section>
+
+  <!-- ============================== METHOD FINDER ============================== -->
+  <section id="finder" class="band">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker" data-i18n="find.kicker">When you see this…</div>
+        <h2 class="section-title" data-i18n-html="find.title">…<span class="swash">try this method</span></h2>
+        <p class="lead" data-i18n="find.lead">Flip a card to see which method a phrase usually signals. Search a word from a question to find the right card.</p>
+      </div>
+      <div class="finder-search">
+        <label class="sr-only" for="finder-q" data-i18n="find.label">Search the method cards</label>
+        <input id="finder-q" type="search" placeholder="Try: stable, maximize, 'each hour', limit…" data-i18n-attr="placeholder:find.placeholder">
+      </div>
+      <div class="flip-grid" id="flip-grid"></div>
+    </div>
+  </section>
+
+  <!-- ============================== TOOLBOX ============================== -->
+  <section id="toolbox">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker" data-i18n="tool.kicker">Your pencil case</div>
+        <h2 class="section-title" data-i18n-html="tool.title">The <span class="swash">toolbox</span></h2>
+        <p class="lead" data-i18n="tool.lead">A working pink calculator and a pocket formula sheet. Check the exam rules on calculators before relying on one.</p>
+      </div>
+      <div class="toolbox-grid">
+        <div>
+          <div class="calc" id="calc" aria-label="Calculator">
+            <div class="calc-brand">
+              <span>LOVELY · fx-♡</span>
+              <span class="mode-toggle" role="group" aria-label="Angle mode">
+                <button type="button" data-mode="rad" class="on">RAD</button>
+                <button type="button" data-mode="deg">DEG</button>
+              </span>
+              <span class="calc-solar" aria-hidden="true"></span>
+            </div>
+            <div class="calc-screen" aria-live="polite">
+              <div class="calc-expr" id="calc-expr"></div>
+              <div class="calc-result" id="calc-result">0</div>
+            </div>
+            <div class="calc-keys" id="calc-keys"></div>
+          </div>
+          <p class="calc-note" data-i18n="tool.calcnote">psst… type on your keyboard too ♡</p>
+        </div>
+        <div class="paper grid-paper" style="padding:26px 24px">
+          <span class="tape lav" style="top:-14px;left:30px;transform:rotate(-6deg)"></span>
+          <h3 style="font-family:var(--f-title);font-size:34px;margin:0 0 6px" data-i18n="tool.formulas">Pocket formula sheet</h3>
+          <div id="formula-pocket"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== TEST ROOM ============================== -->
+  <section id="test" class="band">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker" data-i18n="test.kicker">Practice under exam conditions</div>
+        <h2 class="section-title" data-i18n-html="test.title">The <span class="swash">test room</span></h2>
+        <p class="lead" data-i18n="test.lead">Original exam-style questions written for this garden (not copies of past papers). Hints are free, and each full worked solution waits behind its own button, so try first.</p>
+      </div>
+      <div class="vault-bar paper">
+        <div class="lock-state">
+          <svg viewBox="0 0 64 64" aria-hidden="true"><use href="#lockOpen"/></svg>
+          <span data-i18n="test.signedin">You're signed in, so every worked solution opens with one tap. Attempt the question first ♡</span>
+        </div>
+      </div>
+      <div class="test-picker" id="test-picker" role="tablist" aria-label="Practice tests" data-i18n-attr="aria-label:test.tabsAria"></div>
+      <div id="test-area" style="margin-top:22px"></div>
+      <div id="score-summary"></div>
+    </div>
+  </section>
+
+  <!-- ============================== PLAN ============================== -->
+  <section id="plan">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker" data-i18n="plan.kicker">One week, one family at a time</div>
+        <h2 class="section-title" data-i18n-html="plan.title">Your <span class="swash">7-day plan</span></h2>
+        <p class="lead" data-i18n="plan.lead">Tick things off as you go. Progress saves automatically on this device.</p>
+      </div>
+      <div class="plan-progress">
+        <svg class="ring" viewBox="0 0 100 100" aria-hidden="true">
+          <circle class="bg" cx="50" cy="50" r="40"/>
+          <circle class="fg" id="ring-fg" cx="50" cy="50" r="40" stroke-dasharray="251.3" stroke-dashoffset="251.3"/>
+          <text x="50" y="52" id="ring-text">0%</text>
+        </svg>
+        <div class="hand" style="font-size:24px;color:var(--ink-soft)" id="plan-cheer" data-i18n="plan.cheer0">Every tick is a tiny win ♡</div>
+      </div>
+      <div class="plan-grid" id="plan-grid"></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="sign" data-i18n="foot.sign">with love &amp; limits</div>
+  <p id="footer-note">Every practice and test question here is original, written for this site, and is not a past exam question. Exam patterns come from publicly available MAT 1330 papers; always check your own course outline for what your instructor covers this term.</p>
+  <p class="hand" style="font-size:20px" data-i18n="foot.made">Made for MAT 1330 · University of Ottawa</p>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+<script defer src="assets/js/i18n.js"></script>
+<script defer src="assets/js/secure-data.js"></script>
+<script defer src="assets/js/auth.js"></script>
+<script defer src="assets/js/plot.js"></script>
+<script defer src="assets/js/labs.js"></script>
+<script defer src="assets/js/calc.js"></script>
+<script defer src="assets/js/app.js"></script>
+</body>
+</html>
