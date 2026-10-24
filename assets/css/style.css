@@ -346,6 +346,11 @@ body.locked main, body.locked footer, body.locked .topbar .tabs { visibility: hi
 }
 .gate.opening { opacity: 0; transform: scale(1.04); pointer-events: none; }
 .gate[hidden] { display: none; }
+.gate-splash { display: none; position: relative; z-index: 2; text-align: center; }
+.gate-splash svg { width: 34px; height: 34px; fill: var(--rose-deep); animation: beat 1s ease-in-out infinite; }
+@keyframes beat { 50% { transform: scale(1.25); } }
+html.restoring .gate-card { display: none; }
+html.restoring .gate-splash { display: block; }
 .gate-deco { position: absolute; pointer-events: none; }
 .gate-sakura { top: -10px; left: -20px; width: min(420px, 60vw); }
 .gate-lavender { bottom: -20px; right: -10px; width: min(320px, 50vw); }

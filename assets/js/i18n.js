@@ -8,7 +8,7 @@
 
   const EN = {
     'nav.patterns': 'Patterns', 'nav.labs': 'Labs', 'nav.finder': 'Method finder', 'nav.toolbox': 'Toolbox', 'nav.test': 'Test room', 'nav.plan': '7-day plan',
-    'logout': 'Log out', 'petals.title': 'Falling petals on/off', 'petals.on': 'Petals on ✿', 'petals.off': 'Petals off', 'lang.label': 'Language',
+    'logout': 'Log out', 'petals.title': 'Falling petals on/off', 'petals.on': 'Petals on ✿', 'petals.off': 'Petals off', 'lang.label': 'Language', 'lang.switched': 'English ✿',
     'gate.kicker': 'MAT 1330 study garden', 'gate.sub': 'This little garden is private. Sign in to come in ♡', 'gate.name': 'Name', 'gate.password': 'Password',
     'gate.enter': 'Enter the garden ♡', 'gate.note': 'You stay signed in on this device, and your progress saves automatically.',
     'gate.nocrypto': 'This garden needs a modern browser, opened over https or from a local file.', 'gate.welcome': 'welcome back… ♡',
@@ -95,7 +95,7 @@
 
   const TR = {
     'nav.patterns': 'Kalıplar', 'nav.labs': 'Laboratuvar', 'nav.finder': 'Yöntem bulucu', 'nav.toolbox': 'Araç kutusu', 'nav.test': 'Sınav odası', 'nav.plan': '7 günlük plan',
-    'logout': 'Çıkış yap', 'petals.title': 'Düşen yapraklar açık/kapalı', 'petals.on': 'Yapraklar açık ✿', 'petals.off': 'Yapraklar kapalı', 'lang.label': 'Dil',
+    'logout': 'Çıkış yap', 'petals.title': 'Düşen yapraklar açık/kapalı', 'petals.on': 'Yapraklar açık ✿', 'petals.off': 'Yapraklar kapalı', 'lang.label': 'Dil', 'lang.switched': 'Türkçe ✿',
     'gate.kicker': 'MAT 1330 çalışma bahçesi', 'gate.sub': 'Bu küçük bahçe özel. İçeri girmek için giriş yap ♡', 'gate.name': 'Ad', 'gate.password': 'Şifre',
     'gate.enter': 'Bahçeye gir ♡', 'gate.note': 'Bu cihazda oturumun açık kalır ve ilerlemen otomatik olarak kaydedilir.',
     'gate.nocrypto': 'Bu bahçe için güncel bir tarayıcı gerekiyor; sayfayı https üzerinden ya da yerel dosyadan aç.', 'gate.welcome': 'tekrar hoş geldin… ♡',
@@ -204,18 +204,26 @@
     css.setProperty('--mastered', JSON.stringify(t('mastered.badge')));
     css.setProperty('--tapflip', JSON.stringify(t('find.flip')));
   }
-  function set(next) {
-    if (next === lang) return;
-    try { localStorage.setItem(KEY, next); } catch (e) { /* stays for this visit only */ }
-    location.reload(); // the remembered sign-in reopens the garden in the new language
+  function paintSwitches() {
+    document.querySelectorAll('.lang-switch button').forEach((b) => {
+      const on = b.dataset.lang === lang;
+      b.classList.toggle('on', on);
+      b.setAttribute('aria-pressed', String(on));
+    });
   }
-  window.LovelyI18n = { lang, t, apply, set };
+  // Switch in place (no reload), so the signed-in garden never flashes the sign-in card.
+  // auth.js hears 'lovely:lang' and re-renders the content in the new language.
+  function set(next) {
+    if (next === lang || !STR[next]) return;
+    lang = next;
+    try { localStorage.setItem(KEY, next); } catch (e) { /* stays for this visit only */ }
+    paintSwitches();
+    apply();
+    window.dispatchEvent(new CustomEvent('lovely:lang', { detail: next }));
+  }
+  window.LovelyI18n = { get lang() { return lang; }, t, apply, set };
 
-  document.querySelectorAll('.lang-switch button').forEach((b) => {
-    const on = b.dataset.lang === lang;
-    b.classList.toggle('on', on);
-    b.setAttribute('aria-pressed', String(on));
-    b.addEventListener('click', () => set(b.dataset.lang));
-  });
+  document.querySelectorAll('.lang-switch button').forEach((b) => b.addEventListener('click', () => set(b.dataset.lang)));
+  paintSwitches();
   apply();
 })();

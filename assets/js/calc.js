@@ -159,7 +159,8 @@
   let deg = false;
   let justEvaluated = false;
 
-  const CHEERS = (window.LovelyI18n ? window.LovelyI18n.t('calc.cheers') : '1 ♡ U|U CAN DO IT|KEEP GOING').split('|');
+  // read at press time, so the cheers follow a language switch
+  const cheers = () => (window.LovelyI18n ? window.LovelyI18n.t('calc.cheers') : '1 ♡ U|U CAN DO IT|KEEP GOING').split('|');
   const KEYS = [
     ['sin', 'sin(', 'fn'], ['cos', 'cos(', 'fn'], ['tan', 'tan(', 'fn'], ['ln', 'ln(', 'fn'], ['log', 'log(', 'fn'],
     ['√', 'sqrt(', 'fn'], ['x²', '^2', 'fn'], ['^', '^', 'fn'], ['(', '(', 'fn'], [')', ')', 'fn'],
@@ -188,7 +189,7 @@
   function press(val) {
     if (val === 'ac') { expr = ''; justEvaluated = false; show('0'); return; }
     if (val === 'del') { expr = expr.slice(0, -1); show(); return; }
-    if (val === 'love') { show(CHEERS[Math.floor(Math.random() * CHEERS.length)]); return; }
+    if (val === 'love') { const list = cheers(); show(list[Math.floor(Math.random() * list.length)]); return; }
     if (val === '=') {
       if (!expr.trim()) return;
       try {

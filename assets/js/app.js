@@ -394,10 +394,12 @@
       return b;
     });
     renderMath(grid);
-    q.addEventListener('input', () => {
+    // a property, not addEventListener: a re-render in another language replaces the handler
+    q.oninput = () => {
       const s = q.value.trim().toLocaleLowerCase();
       cards.forEach((el) => { el.style.display = !s || el._text.includes(s) ? '' : 'none'; });
-    });
+    };
+    if (q.value) q.oninput();
   }
 
   function initFormulas() {
@@ -433,6 +435,7 @@
         if (left === 0) { clearInterval(ticking); ticking = null; timerBtn.textContent = t('timer.start'); toast(t('timer.done')); }
       }, 1000);
     });
+    cleanups.push(() => clearInterval(ticking));
 
     tests.forEach((x) => picker.appendChild(h('button', {
       class: 'test-tab', type: 'button', role: 'tab',
@@ -560,14 +563,11 @@
   // ---------- boot ----------
   // The page shell (nav, petals, doodles) starts now; content waits for the sign-in in auth.js.
   let started = false;
-  function start(content, opts) {
-    if (started) return;
-    started = true;
+  const cleanups = []; // timers to stop before a re-render
+  function render(content) {
     C = content || {};
     families = C.families || [];
     window.LOVELY_CONTENT = C; // labs.js reads labOrder from here
-    window.LovelyApp.name = opts && opts.name;
-    try { localStorage.removeItem('lm:student'); } catch (e) { /* left over from the old student card */ }
     initPatterns();
     initFinder();
     initFormulas();
@@ -576,9 +576,32 @@
     if (window.LovelyLabs) window.LovelyLabs.init({ tabs: $('#lab-tabs'), area: $('#lab-area'), renderMath });
     if (C.footer) $('#footer-note').innerHTML = C.footer;
     greet(window.LovelyApp.name);
+  }
+  function start(content, opts) {
+    if (started) return;
+    started = true;
+    window.LovelyApp.name = opts && opts.name;
+    try { localStorage.removeItem('lm:student'); } catch (e) { /* left over from the old student card */ }
+    render(content);
     if (window.LovelyApp.name) toast(t('welcome', { name: window.LovelyApp.name }));
   }
-  window.LovelyApp = { toast, hearts, renderMath, store, start, name: null };
+  // Language switch: rebuild every content section in place and keep the reader where they were.
+  function restart(content) {
+    if (!started) return start(content, { name: window.LovelyApp.name });
+    const anchor = $$('main section[id]').find((s) => s.getBoundingClientRect().bottom > 80);
+    const before = anchor ? anchor.getBoundingClientRect().top : 0;
+    cleanups.splice(0).forEach((fn) => fn());
+    ['#evidence-strip', '#pattern-filters', '#pattern-grid', '#flip-grid', '#formula-pocket', '#test-picker', '#test-area', '#score-summary', '#plan-grid']
+      .forEach((s) => { $(s).innerHTML = ''; });
+    if (window.LovelyLabs) window.LovelyLabs.reset();
+    render(content);
+    const keep = () => { if (anchor) window.scrollBy({ top: anchor.getBoundingClientRect().top - before, behavior: 'instant' }); };
+    keep();
+    // Turkish letters can pull in extra font files that reflow the page a moment later
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => requestAnimationFrame(keep));
+    toast(t('lang.switched'));
+  }
+  window.LovelyApp = { toast, hearts, renderMath, store, start, restart, name: null };
   initNav();
   initPetals();
   initDoodles();

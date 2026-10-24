@@ -408,8 +408,10 @@
   ];
 
   let ui = null;
+  let current = null; // kept across a language re-render
   function activate(id, scroll) {
     if (!ui) return;
+    current = id;
     LABS.forEach((L) => {
       if (!L.tab) return;
       const on = L.id === id;
@@ -432,8 +434,14 @@
         o.tabs.appendChild(L.tab);
         o.area.appendChild(L.panel);
       });
-      activate(order[0]);
+      activate(current && order.includes(current) ? current : order[0]);
     },
-    activate
+    activate,
+    reset() {
+      if (!ui) return;
+      ui.tabs.innerHTML = '';
+      ui.area.innerHTML = '';
+      LABS.forEach((L) => { L.tab = null; L.panel = null; L.built = false; });
+    }
   };
 })();
